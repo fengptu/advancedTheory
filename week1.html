@@ -7,9 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <!-- Chosen Palette: Warm Neutrals (Stone & Amber) -->
-    <!-- Application Structure Plan: Designed as an interactive dashboard for the Week 1 lecture. Instead of a linear document, the app uses a sticky vertical navigation bar to break the content into key themes (Overview, Systems, Implements, Dynamics, Summary). This thematic structure allows students to explore topics non-linearly, review specific concepts easily, and interact with content. The main content panel updates dynamically via JS based on user selection, making it a true single-page application. This design prioritizes "explorability" and "consumability" over mirroring the original report's 3-part structure. -->
-    <!-- Visualization & Content Choices: 1. Report Info: Time allocation (75, 75, 15 min). Goal: Show high-level session structure. Viz: Doughnut Chart. Interaction: Hover tooltip. Justification: Provides a quick visual summary of the lecture's focus. Library: Chart.js. 2. Report Info: Subsystems (Table 1.2). Goal: Organize key components. Viz: Responsive Card Grid. Interaction: N/A (static content loaded via JS nav). Justification: Cards are more modern and mobile-friendly than a wide table. Method: HTML/Tailwind. 3. Report Info: Implement Types (Table 2.1). Goal: Compare hitching types. Viz: Tabbed Interface. Interaction: Click tabs to swap content. Justification: Tabs allow for clean comparison and hide details until requested. Method: Vanilla JS. 4. Report Info: Abstract concepts (DoF, Static/Dynamic). Goal: Visually explain physics. Viz: Custom HTML/CSS Diagrams. Interaction: N/A. Justification: Fulfills the "NO SVG" constraint while adding critical visual instruction. Method: HTML/Tailwind. -->
-    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <!-- Application Structure Plan: Designed as an interactive dashboard for the Week 1 lecture. -->
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
         body {
@@ -94,21 +92,18 @@
             color: #d97706;
         }
     </style>
-    <script type="text/javascript" async
-        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML">
-    </script>
-    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <!-- MathJax v3: Configure BEFORE loading the script -->
     <script>
-      // ตั้งค่า MathJax
       window.MathJax = {
         tex: {
           inlineMath: [['$', '$'], ['\\(', '\\)']]
         },
-        svg: {
-          fontCache: 'global'
+        options: {
+          // keep processing simple HTML (default)
         }
       };
     </script>
+    <script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
 <body class="bg-stone-100">
 
@@ -195,21 +190,21 @@
                         <div id="mounted" class="tab-content active p-4">
                             <h3 class="text-xl font-bold text-stone-800">Mounted Implements</h3>
                             <p class="text-stone-700 mt-2"><span class="font-semibold">Connection:</span> Fully supported by the 3-point hitch (3PH). The implement's mass is added directly to the tractor's mass.</p>
-                            <p class="text-stone-700 mt-2"><span class="font-semibold">Primary Dynamic Effect:</span> Causes a major shift in the system's Center of Gravity (CG). Critically influences the **Rearward Overturning** moment, as all forces are transmitted through the hitch.</p>
+                            <p class="text-stone-700 mt-2"><span class="font-semibold">Primary Dynamic Effect:</span> Causes a major shift in the system's Center of Gravity (CG). Critically influences the <strong>Rearward Overturning</strong> moment, as all forces are transmitted through the hitch.</p>
                             <p class="text-stone-700 mt-2"><span class="font-semibold">Examples:</span> Plows, Rotary Tillers, Small Planters.</p>
                         </div>
                         
                         <div id="semi-mounted" class="tab-content p-4">
                             <h3 class="text-xl font-bold text-stone-800">Semi-Mounted Implements</h3>
                             <p class="text-stone-700 mt-2"><span class="font-semibold">Connection:</span> Connected to the 3PH at the front; supported by its own transport wheels at the rear.</p>
-                            <p class="text-stone-700 mt-2"><span class="font-semibold">Primary Dynamic Effect:</span> Load is shared between the hitch and the implement's wheels. This creates a complex **Pitch Moment** interaction and a very long effective wheelbase.</p>
+                            <p class="text-stone-700 mt-2"><span class="font-semibold">Primary Dynamic Effect:</span> Load is shared between the hitch and the implement's wheels. This creates a complex <strong>Pitch Moment</strong> interaction and a very long effective wheelbase.</p>
                             <p class="text-stone-700 mt-2"><span class="font-semibold">Examples:</span> Large Ripper Plows, Large Seed Drills.</p>
                         </div>
                         
                         <div id="trailed" class="tab-content p-4">
                             <h3 class="text-xl font-bold text-stone-800">Trailed (Towed) Implements</h3>
                             <p class="text-stone-700 mt-2"><span class="font-semibold">Connection:</span> Connected by a simple drawbar. The implement is fully supported by its own wheels.</p>
-                            <p class="text-stone-700 mt-2"><span class="font-semibold">Primary Dynamic Effect:</span> Introduces significant **Lateral Force** and **Yaw Moment** during turns. This directly affects steering stability and can cause **Drifting**.</p>
+                            <p class="text-stone-700 mt-2"><span class="font-semibold">Primary Dynamic Effect:</span> Introduces significant <strong>Lateral Force</strong> and <strong>Yaw Moment</strong> during turns. This directly affects steering stability and can cause <strong>Drifting</strong>.</p>
                             <p class="text-stone-700 mt-2"><span class="font-semibold">Examples:</span> Trailers, Large Disks, Harvesters.</p>
                         </div>
                     </div>
@@ -263,7 +258,7 @@
                                     </ul>
                                 </div>
                             </div>
-                            <p class="text-sm text-stone-600 mt-4">For **Rearward Overturning**, we simplify to a 2-DoF model: Longitudinal position (X) and Pitch angle (θ).</p>
+                            <p class="text-sm text-stone-600 mt-4">For <strong>Rearward Overturning</strong>, we simplify to a 2-DoF model: Longitudinal position (X) and Pitch angle (θ).</p>
                         </div>
                     </div>
                 </div>
