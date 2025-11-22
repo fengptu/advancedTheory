@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Week 1: Advanced Tractor-Implement Systems</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Chosen Palette: Warm Neutrals (Stone & Amber) -->
+    <!-- Application Structure Plan: Designed as an interactive dashboard for the Week 1 lecture. Instead of a linear document, the app uses a sticky vertical navigation bar to break the content into key themes (Overview, Systems, Implements, Dynamics, Summary). This thematic structure allows students to explore topics non-linearly, review specific concepts easily, and interact with content. The main content panel updates dynamically via JS based on user selection, making it a true single-page application. This design prioritizes "explorability" and "consumability" over mirroring the original report's 3-part structure. -->
+    <!-- Visualization & Content Choices: 1. Report Info: Time allocation (75, 75, 15 min). Goal: Show high-level session structure. Viz: Doughnut Chart. Interaction: Hover tooltip. Justification: Provides a quick visual summary of the lecture's focus. Library: Chart.js. 2. Report Info: Subsystems (Table 1.2). Goal: Organize key components. Viz: Responsive Card Grid. Interaction: N/A (static content loaded via JS nav). Justification: Cards are more modern and mobile-friendly than a wide table. Method: HTML/Tailwind. 3. Report Info: Implement Types (Table 2.1). Goal: Compare hitching types. Viz: Tabbed Interface. Interaction: Click tabs to swap content. Justification: Tabs allow for clean comparison and hide details until requested. Method: Vanilla JS. 4. Report Info: Abstract concepts (DoF, Static/Dynamic). Goal: Visually explain physics. Viz: Custom HTML/CSS Diagrams. Interaction: N/A. Justification: Fulfills the "NO SVG" constraint while adding critical visual instruction. Method: HTML/Tailwind. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f5f5f4; 
+            color: #44403c; 
+        }
+        .nav-btn {
+            display: block;
+            width: 100%;
+            padding: 0.75rem 1rem;
+            text-align: left;
+            font-weight: 600;
+            color: #57534e;
+            border-radius: 0.5rem;
+            transition: all 0.2s ease-in-out;
+            border-left: 4px solid transparent;
+        }
+        .nav-btn:hover {
+            background-color: #e7e5e4;
+            color: #1c1917;
+        }
+        .nav-btn.active {
+            background-color: #fef3c7; 
+            color: #92400e; 
+            border-left-color: #d97706; 
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 350px;
+        }
+        .content-section {
+            display: none; 
+        }
+        .content-section.active {
+            display: block;
+        }
+        .tab-btn {
+            padding: 0.5rem 1rem;
+            font-weight: 600;
+            color: #78716c;
+            border-bottom: 3px solid transparent;
+            transition: all 0.2s;
+        }
+        .tab-btn:hover {
+            color: #1c1917;
+        }
+        .tab-btn.active {
+            color: #d97706; 
+            border-bottom-color: #d97706;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        
+        .diagram {
+            border: 2px solid #d6d3d1;
+            background-color: #fafaf9;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            text-align: center;
+        }
+        .diagram-box {
+            border: 2px solid #44403c;
+            background: #fff;
+            padding: 1rem;
+            width: 120px;
+            margin: 0.5rem auto;
+            font-weight: 600;
+        }
+        .diagram-arrow {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #d97706;
+        }
+    </style>
+</head>
+<body class="bg-stone-100">
+
+    <main class="max-w-7xl mx-auto p-4 md:p-8">
+        <header class="mb-8">
+            <h1 class="text-3xl md:text-4xl font-bold text-stone-900">Week 1: Introduction to Advanced Tractor-Implement Systems</h1>
+            <p class="text-xl text-stone-600 mt-2">An interactive guide to the 3-hour introductory session.</p>
+        </header>
+
+        <div class="md:flex md:space-x-8">
+            
+            <aside class="w-full md:w-1/4 lg:w-1/5 mb-6 md:mb-0">
+                <nav class="sticky top-8 bg-white p-4 rounded-lg shadow-md">
+                    <ul class="space-y-2">
+                        <li><button class="nav-btn active" data-content="overview">Overview & Objectives</button></li>
+                        <li><button class="nav-btn" data-content="systems">1. Key Tractor Subsystems</button></li>
+                        <li><button class="nav-btn" data-content="implements">2. Implement Classification</button></li>
+                        <li><button class="nav-btn" data-content="dynamics">3. Dynamic Principles</button></li>
+                        <li><button class="nav-btn" data-content="summary">4. Summary & Tasks</button></li>
+                    </ul>
+                </nav>
+            </aside>
+
+            <section id="content-panel" class="w-full md:w-3/4 lg:w-4/5">
+                
+                <div id="overview-content" class="content-section active space-y-6">
+                    <div class="bg-white p-6 rounded-lg shadow-md">
+                        <h2 class="text-2xl font-bold text-amber-700 mb-4">Session Objectives</h2>
+                        <p class="mb-4 text-stone-700">This module provides the foundation for the entire course. By the end of this session, you will be able to navigate the core concepts of advanced machinery analysis.</p>
+                        <ul class="list-disc list-outside pl-5 space-y-2 text-stone-700">
+                            <li><span class="font-semibold">Contextualize:</span> Differentiate advanced dynamic analysis from basic machine design.</li>
+                            <li><span class="font-semibold">Analyze:</span> Break down the functional roles of key tractor subsystems (Power Train, Hydraulics, Chassis) and their impact on field performance.</li>
+                            <li><span class="font-semibold">Classify:</span> Categorize agricultural implements by their hitching mechanism and understand the resulting dynamic effects.</li>
+                            <li><span class="font-semibold">Formulate:</span> Create a simplified dynamic model by identifying the necessary Degrees of Freedom (DoF) for stability analysis.</li>
+                        </ul>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-md">
+                        <h2 class="text-2xl font-bold text-amber-700 mb-4">Session Time Allocation (180 min)</h2>
+                        <p class="text-stone-700 text-center mb-4">The session is broken into three main parts, with the majority focused on foundational knowledge and analysis.</p>
+                        <div class="chart-container">
+                            <canvas id="timeChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="systems-content" class="content-section space-y-6">
+                    <div class="bg-white p-6 rounded-lg shadow-md">
+                        <h2 class="text-2xl font-bold text-amber-700 mb-4">1. Key Tractor Subsystems Review</h2>
+                        <p class="text-stone-700 mb-6">This section reviews the systems that provide the inputs and handle the outputs of the dynamic models we will study. Understanding their function is critical to analyzing performance.</p>
+                        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+                            
+                            <div class="border border-stone-200 p-4 rounded-lg bg-stone-50">
+                                <h3 class="text-lg font-bold text-stone-800">A. Power Train</h3>
+                                <p class="text-sm text-stone-600 mt-1"><span class="font-semibold">Function:</span> Delivers torque to the wheels. Transmission choice (CVT vs. Powershift) dictates the ability to maintain optimal engine speed for traction.</p>
+                                <p class="text-sm text-stone-600 mt-2"><span class="font-semibold">Critical Parameters:</span> Engine Torque Curve, Transmission Efficiency.</p>
+                            </div>
+                            
+                            <div class="border border-stone-200 p-4 rounded-lg bg-stone-50">
+                                <h3 class="text-lg font-bold text-stone-800">B. Chassis & Ballasting</h3>
+                                <p class="text-sm text-stone-600 mt-1"><span class="font-semibold">Function:</span> The structural frame and weight distribution. Ballasting (adding weight) optimizes the load ratio on drive wheels to maximize traction.</p>
+                                <p class="text-sm text-stone-600 mt-2"><span class="font-semibold">Critical Parameters:</span> Center of Gravity (CG) location, Axle Load, Ballast Mass.</p>
+                            </div>
+                            
+                            <div class="border border-stone-200 p-4 rounded-lg bg-stone-50">
+                                <h3 class="text-lg font-bold text-stone-800">C. Hydraulics & Control</h3>
+                                <p class="text-sm text-stone-600 mt-1"><span class="font-semibold">Function:</span> The core mechanism for implement interaction. Draft Control is a feedback system to stabilize load and prevent wheel slip.</p>
+                                <p class="text-sm text-stone-600 mt-2"><span class="font-semibold">Critical Parameters:</span> Hydraulic response time, Draft sensing, Hitch geometry.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="implements-content" class="content-section space-y-6">
+                    <div class="bg-white p-6 rounded-lg shadow-md">
+                        <h2 class="text-2xl font-bold text-amber-700 mb-2">2. Implement Classification by Hitching</h2>
+                        <p class="text-stone-700 mb-6">The method of coupling is the most significant factor determining the dynamic equations of the combined tractor-implement system. Select a type to see its dynamic effect.</p>
+                        
+                        <nav class="flex border-b border-stone-300 mb-4" id="implement-tabs">
+                            <button class="tab-btn active" data-tab="mounted">1. Mounted</button>
+                            <button class="tab-btn" data-tab="semi-mounted">2. Semi-Mounted</button>
+                            <button class="tab-btn" data-tab="trailed">3. Trailed (Towed)</button>
+                        </nav>
+                        
+                        <div id="mounted" class="tab-content active p-4">
+                            <h3 class="text-xl font-bold text-stone-800">Mounted Implements</h3>
+                            <p class="text-stone-700 mt-2"><span class="font-semibold">Connection:</span> Fully supported by the 3-point hitch (3PH). The implement's mass is added directly to the tractor's mass.</p>
+                            <p class="text-stone-700 mt-2"><span class="font-semibold">Primary Dynamic Effect:</span> Causes a major shift in the system's Center of Gravity (CG). Critically influences the **Rearward Overturning** moment, as all forces are transmitted through the hitch.</p>
+                            <p class="text-stone-700 mt-2"><span class="font-semibold">Examples:</span> Plows, Rotary Tillers, Small Planters.</p>
+                        </div>
+                        
+                        <div id="semi-mounted" class="tab-content p-4">
+                            <h3 class="text-xl font-bold text-stone-800">Semi-Mounted Implements</h3>
+                            <p class="text-stone-700 mt-2"><span class="font-semibold">Connection:</span> Connected to the 3PH at the front; supported by its own transport wheels at the rear.</p>
+                            <p class="text-stone-700 mt-2"><span class="font-semibold">Primary Dynamic Effect:</span> Load is shared between the hitch and the implement's wheels. This creates a complex **Pitch Moment** interaction and a very long effective wheelbase.</p>
+                            <p class="text-stone-700 mt-2"><span class="font-semibold">Examples:</span> Large Ripper Plows, Large Seed Drills.</p>
+                        </div>
+                        
+                        <div id="trailed" class="tab-content p-4">
+                            <h3 class="text-xl font-bold text-stone-800">Trailed (Towed) Implements</h3>
+                            <p class="text-stone-700 mt-2"><span class="font-semibold">Connection:</span> Connected by a simple drawbar. The implement is fully supported by its own wheels.</p>
+                            <p class="text-stone-700 mt-2"><span class="font-semibold">Primary Dynamic Effect:</span> Introduces significant **Lateral Force** and **Yaw Moment** during turns. This directly affects steering stability and can cause **Drifting**.</p>
+                            <p class="text-stone-700 mt-2"><span class="font-semibold">Examples:</span> Trailers, Large Disks, Harvesters.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="dynamics-content" class="content-section space-y-6">
+                    <div class="bg-white p-6 rounded-lg shadow-md">
+                        <h2 class="text-2xl font-bold text-amber-700 mb-4">3. Principles of Advanced Dynamic Analysis</h2>
+                        <p class="text-stone-700 mb-6">This section bridges the mechanical review with the mathematical modeling. We move from static (stationary) analysis to dynamic (moving) analysis.</p>
+                        
+                        <h3 class="text-xl font-bold text-stone-800 mb-4">Static vs. Dynamic Stability</h3>
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <div class="diagram">
+                                <h4 class="font-semibold text-lg">Static Stability (At Rest)</h4>
+                                <div class="diagram-box">Tractor</div>
+                                <div class="diagram-arrow">↓ W (Weight)</div>
+                                <div class="diagram-arrow">↑ N (Normal Force)</div>
+                                <p class="mt-2 font-mono text-lg">ΣF = 0</p>
+                                <p class="text-sm text-stone-600">Analyzes stability based on CG position relative to the wheelbase when stationary.</p>
+                            </div>
+                            <div class="diagram">
+                                <h4 class="font-semibold text-lg">Dynamic Stability (Moving)</h4>
+                                <div class="diagram-box">Tractor</div>
+                                <div class="diagram-arrow">→ F (Thrust)</div>
+                                <div class="diagram-arrow">← D (Drag)</div>
+                                <p class="mt-2 font-mono text-lg">ΣF = m*a</p>
+                                <p class="text-sm text-stone-600">Analyzes stability during acceleration, turning, or on a slope, including inertial forces.</p>
+                            </div>
+                        </div>
+
+                        <h3 class="text-xl font-bold text-stone-800 mt-8 mb-4">Degrees of Freedom (DoF) & Simplified Models</h3>
+                        <p class="text-stone-700 mb-4">A complete 3D analysis is too complex (12+ DoF). We simplify the problem by selecting only the *relevant* DoF for the specific analysis.</p>
+                        
+                        <div class="diagram p-4">
+                            <h4 class="font-semibold text-lg mb-2">6-DoF of a Rigid Body (Tractor)</h4>
+                            <div class="grid grid-cols-2 gap-4 text-left">
+                                <div>
+                                    <h5 class="font-semibold">Translational (Motion)</h5>
+                                    <ul class="list-disc pl-5">
+                                        <li>X (Surge - forward/back)</li>
+                                        <li>Y (Sway - side to side)</li>
+                                        <li>Z (Heave - up/down)</li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <h5 class="font-semibold">Rotational (Orientation)</h5>
+                                    <ul class="list-disc pl-5">
+                                        <li>φ (Roll - side tipping)</li>
+                                        <li>θ (Pitch - front/back tipping)</li>
+                                        <li>ψ (Yaw - turning left/right)</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <p class="text-sm text-stone-600 mt-4">For **Rearward Overturning**, we simplify to a 2-DoF model: Longitudinal position (X) and Pitch angle (θ).</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="summary-content" class="content-section space-y-6">
+                    <div class="bg-white p-6 rounded-lg shadow-md">
+                        <h2 class="text-2xl font-bold text-amber-700 mb-4">4. Summary & Next Steps</h2>
+                        <h3 class="text-xl font-bold text-stone-800 mb-4">Key Takeaways</h3>
+                        <ul class="list-disc list-outside pl-5 space-y-2 text-stone-700">
+                            <li><span class="font-semibold">The Hitch is the Key:</span> The point of connection (3PH vs. Drawbar) defines the entire dynamic model.</li>
+                            <li><span class="font-semibold">Dynamics over Statics:</span> Field performance and safety must be analyzed under dynamic loads (acceleration, turning).</li>
+                            <li><span class="font-semibold">Simplify to Solve:</span> We use simplified DoF models to analyze specific failure modes (like overturning or drifting).</li>
+                        </ul>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-md">
+                        <h2 class="text-2xl font-bold text-amber-700 mb-4">Application Task: Static Review Problem</h2>
+                        <p class="text-stone-700 mb-4">As preparation for next week, apply static principles to the following problem:</p>
+                        <div class="bg-amber-50 border border-amber-200 p-4 rounded-lg">
+                            <p class="font-medium text-stone-800">A 6,000 kg 4WD tractor has its Center of Gravity (CG) located 1.5 m forward of the rear axle and 1.0 m above the ground. The wheelbase is 3.0 m.</p>
+                            <p class="text-stone-700 mt-4">**Calculate:**</p>
+                            <ol class="list-decimal list-outside pl-5 mt-2 space-y-1">
+                                <li>The static load on the front and rear axles when the tractor is at rest.</li>
+                                <li>The new static axle loads if the tractor applies a horizontal draft force ($F_D = 40 \text{ kN}$) at $0.5 \text{ m}$ above the ground.</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+
+            </section>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            const navButtons = document.querySelectorAll('.nav-btn');
+            const contentSections = document.querySelectorAll('.content-section');
+
+            navButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const contentId = button.dataset.content;
+
+                    navButtons.forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+
+                    contentSections.forEach(section => {
+                        if (section.id === `${contentId}-content`) {
+                            section.classList.add('active');
+                        } else {
+                            section.classList.remove('active');
+                        }
+                    });
+                });
+            });
+
+            
+            const implementTabsContainer = document.getElementById('implement-tabs');
+            if (implementTabsContainer) {
+                const tabButtons = implementTabsContainer.querySelectorAll('.tab-btn');
+                const tabContents = implementTabsContainer.parentElement.querySelectorAll('.tab-content');
+
+                tabButtons.forEach(button => {
+                    button.addEventListener('click', () => {
+                        const tabId = button.dataset.tab;
+
+                        tabButtons.forEach(btn => btn.classList.remove('active'));
+                        button.classList.add('active');
+
+                        tabContents.forEach(content => {
+                            if (content.id === tabId) {
+                                content.classList.add('active');
+                            } else {
+                                content.classList.remove('active');
+                            }
+                        });
+                    });
+                });
+            }
+
+            
+            function formatLabel(str) {
+                if (str.length <= 16) return str;
+                const words = str.split(' ');
+                let lines = [];
+                let currentLine = '';
+                for (const word of words) {
+                    if ((currentLine + ' ' + word).trim().length > 16) {
+                        lines.push(currentLine.trim());
+                        currentLine = word;
+                    } else {
+                        currentLine = (currentLine + ' ' + word).trim();
+                    }
+                }
+                if (currentLine) lines.push(currentLine.trim());
+                return lines;
+            }
+
+            
+            const timeCtx = document.getElementById('timeChart');
+            if (timeCtx) {
+                new Chart(timeCtx.getContext('2d'), {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Part 1: Foundation & Review', 'Part 2: Classification & Dynamics', 'Part 3: Conclusion & Application'],
+                        datasets: [{
+                            label: 'Session Time (min)',
+                            data: [75, 75, 15],
+                            backgroundColor: [
+                                '#f59e0b', 
+                                '#d97706', 
+                                '#b45309'  
+                            ],
+                            borderColor: '#f5f5f4',
+                            borderWidth: 4,
+                            hoverOffset: 8
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: {
+                                    font: {
+                                        family: "'Inter', sans-serif",
+                                        size: 12
+                                    },
+                                    color: '#44403c'
+                                }
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        return `${context.label}: ${context.raw} minutes`;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+        });
+    </script>
+</body>
+</html>
