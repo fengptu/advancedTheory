@@ -6,8 +6,7 @@
     <title>Week 1: Advanced Tractor-Implement Systems</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- Chosen Palette: Warm Neutrals (Stone & Amber) -->
-    <!-- Application Structure Plan: Designed as an interactive dashboard for the Week 1 lecture. -->
+    
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
         body {
@@ -91,8 +90,82 @@
             font-weight: bold;
             color: #d97706;
         }
+
+        /* --- CSS NEW/UPDATED for Problem Set and Accordion --- */
+        .problem-content {
+            display: none; /* Hide problem content by default */
+        }
+        .problem-content.active {
+            display: block; /* Show active problem content */
+        }
+        .accordion-toggle {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            padding: 0.75rem 1rem;
+            font-weight: 600;
+            text-align: left;
+            background-color: #fef3c7; /* Amber-100 */
+            border: 1px solid #fde68a; /* Amber-200 */
+            border-radius: 0.375rem;
+            margin-top: 0.5rem;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .accordion-toggle:hover {
+            background-color: #fcd34d; /* Amber-300 */
+        }
+        .accordion-toggle .icon::after {
+            content: '+';
+            font-size: 1.25rem;
+            transition: transform 0.2s;
+        }
+        .accordion-toggle.active .icon::after {
+            content: '-';
+        }
+        .accordion-content {
+            /* Key change: Hide content by default */
+            display: none; 
+            padding: 1rem;
+            border-left: 3px solid #f59e0b; /* Amber-500 */
+            background-color: #fff7ed; /* Orange-50 for subtle contrast */
+            margin-top: 0.25rem;
+            border-radius: 0 0 0.375rem 0.375rem;
+        }
+        .accordion-content.active {
+            /* Key change: Show content when active */
+            display: block; 
+        }
+        .fbd-diagram {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            padding: 2rem;
+            background-color: #fefcfb;
+            border: 1px solid #e7e5e4;
+            border-radius: 0.5rem;
+            min-height: 150px;
+        }
+        .fbd-box {
+            border: 2px solid #92400e;
+            background: #fff;
+            padding: 0.5rem 1rem;
+            font-weight: 600;
+            position: absolute;
+            top: 30%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        .fbd-arrow {
+            font-size: 0.9rem;
+            font-weight: bold;
+            color: #44403c;
+            position: absolute;
+        }
+
     </style>
-    <!-- MathJax v3: Configure BEFORE loading the script -->
     <script>
       window.MathJax = {
         tex: {
@@ -123,6 +196,8 @@
                         <li><button class="nav-btn" data-content="implements">2. Implement Classification</button></li>
                         <li><button class="nav-btn" data-content="dynamics">3. Dynamic Principles</button></li>
                         <li><button class="nav-btn" data-content="summary">4. Summary & Tasks</button></li>
+                        
+                        <li><button class="nav-btn" data-content="problem">5. Interactive Problem Set</button></li>
                     </ul>
                 </nav>
             </aside>
@@ -287,6 +362,248 @@
                     </div>
                 </div>
 
+                <div id="problem-content" class="content-section space-y-6">
+                    <div class="bg-white p-6 rounded-lg shadow-md">
+                        <h2 class="text-2xl font-bold text-amber-700 mb-4">5. Interactive Problem Set </h2>
+                        <div class="md:flex md:space-x-8">
+                            
+                            <aside class="w-full md:w-1/3 lg:w-1/4 mb-6 md:mb-0">
+                                <nav class="sticky top-8 bg-white p-4 rounded-lg shadow-md">
+                                    <ul class="space-y-2" id="problem-nav">
+                                        <li><button class="nav-btn active" data-problem="p1">Problem 1: Axle Load Shift</button></li>
+                                        <li><button class="nav-btn" data-problem="p2">Problem 2: 3PH Linkage Forces</button></li>
+                                        <li><button class="nav-btn" data-problem="p3">Problem 3: Dynamic Overturning</button></li>
+                                    </ul>
+                                </nav>
+                            </aside>
+
+                            <section id="problem-panel" class="w-full md:w-2/3 lg:w-3/4">
+                                
+                                <div id="p1-content" class="problem-content active space-y-6">
+                                    <div class="bg-white p-6 rounded-lg shadow-md">
+                                        <h2 class="text-2xl font-bold text-amber-700 mb-4">Problem 1: Static Load Shift During Draft</h2>
+                                        <p class="text-stone-700 mb-4">A 4WD tractor has a total mass <span class="math"><i class="variable">M</i> = 6,000 kg</span> and a wheelbase <span class="math"><i class="variable">L</i> = 3.0 m</span>. The Center of Gravity (CG) is located <span class="math"><i class="variable">L<sub class="sub">r</sub></i> = 1.5 m</span> forward of the rear axle and at a height <span class="math"><i class="variable">h<sub class="sub">CG</sub></i> = 1.0 m</span>.</p>
+                                        <p class="text-stone-700 mb-4">The tractor pulls a trailed implement, exerting a Draft Force <span class="math"><i class="variable">F<sub class="sub">D</sub></i> = 40 kN</span> at a drawbar height <span class="math"><i class="variable">h<sub class="sub">D</sub></i> = 0.5 m</span>. (Assume <span class="math"><i class="variable">g</i> = 9.81 m/s<sup>2</sup></span>).</p>
+                                        <h3 class="text-lg font-semibold text-stone-800">Questions:</h3>
+                                        <ol class="list-decimal list-outside pl-6 text-stone-700">
+                                            <li>Calculate the Normal Forces on the front (<i class="variable">N<sub class="sub">f</sub></i>) and rear (<i class="variable">N<sub class="sub">r</sub></i>) axles at rest.</li>
+                                            <li>Calculate the new Normal Forces (<i class="variable">N<sub class="sub">f</sub>'</i> and <i class="variable">N<sub class="sub">r</sub>'</i>) while pulling the implement.</li>
+                                        </ol>
+                                    </div>
+
+                                    <div class="fbd-diagram">
+                                        <div class="fbd-box">Tractor (CG)</div>
+                                        <div class="fbd-arrow" style="left: 20%; bottom: 10px;">↑ <i class="variable">N<sub class="sub">f</sub>'</i></div>
+                                        <div class="fbd-arrow" style="left: 75%; bottom: 10px;">↑ <i class="variable">N<sub class="sub">r</sub>'</i></div>
+                                        <div class="fbd-arrow" style="left: 50%; top: 10px; transform: translateX(-50%);">↓ <i class="variable">W</i></div>
+                                        <div class="fbd-arrow" style="right: 10%; top: 60%;">← <i class="variable">F<sub class="sub">D</sub></i></div>
+                                    </div>
+
+                                    <div class="space-y-2 accordion-container">
+                                        <div class="accordion-item">
+                                            <button class="accordion-toggle">
+                                                <span>Step 1: Calculate Total Weight (<i>W</i>)</span>
+                                                <span class="icon"></span>
+                                            </button>
+                                            <div class="accordion-content">
+                                                <p class="text-stone-700">First, convert the tractor's mass to weight (a force).</p>
+                                                <p class="mt-2"><span class="math"><i class="variable">W</i> = <i class="variable">M</i> × <i class="variable">g</i></span></p>
+                                                <p class="mt-2"><span class="math"><i class="variable">W</i> = 6,000 kg × 9.81 m/s<sup>2</sup> = 58,860 N</span></p>
+                                            </div>
+                                        </div>
+                                        <div class="accordion-item">
+                                            <button class="accordion-toggle">
+                                                <span>Step 2: Analysis at Rest (Question 1)</span>
+                                                <span class="icon"></span>
+                                            </button>
+                                            <div class="accordion-content">
+                                                <p class="text-stone-700">To find <i class="variable">N<sub class="sub">f</sub></i>, sum the moments around the rear axle ($R$):</p>
+                                                <p class="mt-2"><span class="math">Σ<i class="variable">M<sub class="sub">R</sub></i> = 0</span></p>
+                                                <p class="mt-2"><span class="math">(<i class="variable">N<sub class="sub">f</sub></i> × <i class="variable">L</i>) - (<i class="variable">W</i> × <i class="variable">L<sub class="sub">r</sub></i>) = 0</span></p>
+                                                <p class="mt-2"><span class="math"><i class="variable">N<sub class="sub">f</sub></i> = (58,860 N × 1.5 m) / 3.0 m = 29,430 N</span></p>
+                                                <p class="text-stone-700 mt-4">To find <i class="variable">N<sub class="sub">r</sub></i>, sum the vertical forces:</p>
+                                                <p class="mt-2"><span class="math"><i class="variable">N<sub class="sub">r</sub></i> = <i class="variable">W</i> - <i class="variable">N<sub class="sub">f</sub></i> = 58,860 N - 29,430 N = 29,430 N</span></p>
+                                                <p class="font-bold text-amber-800 mt-2">Answer 1: $N_f = 29,430 \text{ N}$, $N_r = 29,430 \text{ N}$</p>
+                                            </div>
+                                        </div>
+                                        <div class="accordion-item">
+                                            <button class="accordion-toggle">
+                                                <span>Step 3: Analysis Under Draft Load (Question 2)</span>
+                                                <span class="icon"></span>
+                                            </button>
+                                            <div class="accordion-content">
+                                                <p class="text-stone-700">The draft force <i class="variable">F<sub class="sub">D</sub></i> creates a moment that shifts weight. Sum moments around the front axle ($F$) to find <i class="variable">N<sub class="sub">r</sub>'</i>:</p>
+                                                <p class="mt-2"><span class="math">Σ<i class="variable">M<sub class="sub">F</sub></i> = 0</span></p>
+                                                <p class="mt-2"><span class="math">(<i class="variable">N<sub class="sub">r</sub>'</i> × <i class="variable">L</i>) - (<i class="variable">W</i> × (<i class="variable">L</i> - <i class="variable">L<sub class="sub">r</sub></i>)) - (<i class="variable">F<sub class="sub">D</sub></i> × <i class="variable">h<sub class="sub">D</sub></i>) = 0</span></p>
+                                                <p class="mt-2"><span class="math"><i class="variable">N<sub class="sub">r</sub>'</i> = [(58,860 N × 1.5 m) + (40,000 N × 0.5 m)] / 3.0 m</span></p>
+                                                <p class="mt-2"><span class="math"><i class="variable">N<sub class="sub">r</sub>'</i> = (88,290 N·m + 20,000 N·m) / 3.0 m = 36,097 N</span></p>
+                                                <p class="text-stone-700 mt-4">Sum vertical forces to find <i class="variable">N<sub class="sub">f</sub>'</i>:</p>
+                                                <p class="mt-2"><span class="math"><i class="variable">N<sub class="sub">f</sub>'</i> = <i class="variable">W</i> - <i class="variable">N<sub class="sub">r</sub>'</i> = 58,860 N - 36,097 N = 22,763 N</span></p>
+                                                <p class="font-bold text-amber-800 mt-2">Answer 2: $N_f' = 22,763 \text{ N}$, $N_r' = 36,097 \text{ N}$</p>
+                                            </div>
+                                        </div>
+                                        <div class="accordion-item">
+                                            <button class="accordion-toggle">
+                                                <span>Conclusion</span>
+                                                <span class="icon"></span>
+                                            </button>
+                                            <div class="accordion-content">
+                                                <p class="text-stone-700">The draft load caused <span class="math">6,667 N</span> of weight to transfer from the front axle to the rear axle. This is a critical concept for traction, as it increases the normal force on the primary drive wheels.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div id="p2-content" class="problem-content space-y-6">
+                                    <div class="bg-white p-6 rounded-lg shadow-md">
+                                        <h2 class="text-2xl font-bold text-amber-700 mb-4">Problem 2: 3-Point Hitch (3PH) Linkage Forces</h2>
+                                        <p class="text-stone-700 mb-4">A tractor pulls a mounted implement, resulting in a net horizontal draft force <span class="math"><i class="variable">F<sub class="sub">D</sub></i> = 45 kN</span>. The vertical distance between the Top Link connection and the Lower Link connection on the implement is <span class="math"><i class="variable">d<sub class="sub">v</sub></i> = 1.0 m</span>.</p>
+                                        <p class="text-stone-700 mb-4">For this simplified model, assume both links are horizontal and the net draft force <i class="variable">F<sub class="sub">D</sub></i> acts at the midpoint between the links (0.5 m above the lower link).</p>
+                                        <h3 class="text-lg font-semibold text-stone-800">Question:</h3>
+                                        <p class="text-stone-700">Calculate the force in the Top Link (<i class="variable">F<sub class="sub">T</sub></i>) and the total force in the Lower Links (<i class="variable">F<sub class="sub">L</sub></i>).</p>
+                                    </div>
+
+                                    <div class="fbd-diagram" style="height: 200px;">
+                                        <div class="fbd-box" style="top: 50%; left: 20%; padding: 2rem 1rem;">Implement Frame</div>
+                                        <div class="fbd-arrow" style="left: 45%; top: 20%;">← <i class="variable">F<sub class="sub">T</sub></i> (Top Link)</div>
+                                        <div class="fbd-arrow" style="left: 45%; top: 70%;">← <i class="variable">F<sub class="sub">L</sub></i> (Lower Link)</div>
+                                        <div class="fbd-arrow" style="right: 10%; top: 45%; color: #92400e">→ <i class="variable">F<sub class="sub">D</sub></i> (Draft)</div>
+                                    </div>
+
+                                    <div class="space-y-2 accordion-container">
+                                        <div class="accordion-item">
+                                            <button class="accordion-toggle">
+                                                <span>Step 1: Horizontal Force Equilibrium</span>
+                                                <span class="icon"></span>
+                                            </button>
+                                            <div class="accordion-content">
+                                                <p class="text-stone-700">The sum of the horizontal forces from the links must equal the total draft force $F_D$.</p>
+                                                <p class="mt-2"><span class="math">Σ<i class="variable">F<sub class="sub">x</sub></i> = 0</span></p>
+                                                <p class="mt-2"><span class="math"><i class="variable">F<sub class="sub">L</sub></i> + <i class="variable">F<sub class="sub">T</sub></i> = <i class="variable">F<sub class="sub">D</sub></i></span></p>
+                                                <p class="mt-2"><span class="math"><i class="variable">F<sub class="sub">L</sub></i> + <i class="variable">F<sub class="sub">T</sub></i> = 45,000 N</span> (Equation 1)</p>
+                                            </div>
+                                        </div>
+                                        <div class="accordion-item">
+                                            <button class="accordion-toggle">
+                                                <span>Step 2: Moment Equilibrium (Find <i>F<sub class="sub">T</sub></i>)</span>
+                                                <span class="icon"></span>
+                                            </button>
+                                            <div class="accordion-content">
+                                                <p class="text-stone-700">To find <i class="variable">F<sub class="sub">T</sub></i>, sum the moments around the Lower Link connection point ($L$). This makes the moment from <i class="variable">F<sub class="sub">L</sub></i> zero.</p>
+                                                <p class="mt-2"><span class="math">Σ<i class="variable">M<sub class="sub">L</sub></i> = 0</span></p>
+                                                <p class="text-stone-700 mt-2">The moment from $F_D$ must be balanced by the moment from $F_T$.</p>
+                                                <p class="mt-2"><span class="math">(<i class="variable">F<sub class="sub">D</sub></i> × 0.5 m) - (<i class="variable">F<sub class="sub">T</sub></i> × <i class="variable">d<sub class="sub">v</sub></i>) = 0</span></p>
+                                                <p class="mt-2"><span class="math">(45,000 N × 0.5 m) = <i class="variable">F<sub class="sub">T</sub></i> × 1.0 m</span></p>
+                                                <p class="mt-2"><span class="math">22,500 N·m = <i class="variable">F<sub class="sub">T</sub></i> × 1.0 m</span></p>
+                                                <p class="mt-2"><span class="math"><i class="variable">F<sub class="sub">T</sub></i> = 22,500 N</span></p>
+                                            </div>
+                                        </div>
+                                        <div class="accordion-item">
+                                            <button class="accordion-toggle">
+                                                <span>Step 3: Calculate Lower Link Force (<i>F<sub class="sub">L</sub></i>)</span>
+                                                <span class="icon"></span>
+                                            </button>
+                                            <div class="accordion-content">
+                                                <p class="text-stone-700">Substitute the value of <i class="variable">F<sub class="sub">T</sub></i> back into Equation 1.</p>
+                                                <p class="mt-2"><span class="math"><i class="variable">F<sub class="sub">L</sub></i> + 22,500 N = 45,000 N</span></p>
+                                                <p class="mt-2"><span class="math"><i class="variable">F<sub class="sub">L</sub></i> = 45,000 N - 22,500 N = 22,500 N</span></p>
+                                            </div>
+                                        </div>
+                                        <div class="accordion-item">
+                                            <button class="accordion-toggle">
+                                                <span>Conclusion</span>
+                                                <span class="icon"></span>
+                                            </button>
+                                            <div class="accordion-content">
+                                                <p class="font-bold text-amber-800">Answer: $F_T = 22.5 \text{ kN}$ and $F_L = 22.5 \text{ kN}$</p>
+                                                <p class="text-stone-700 mt-2">In this simplified model, the draft load is shared equally. In a real system, the Top Link is often in compression, which this model can show if the $F_D$ acts above the Top Link, creating a moment in the opposite direction.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div id="p3-content" class="problem-content space-y-6">
+                                    <div class="bg-white p-6 rounded-lg shadow-md">
+                                        <h2 class="text-2xl font-bold text-amber-700 mb-4">Problem 3: Dynamic Overturning Stability</h2>
+                                        <p class="text-stone-700 mb-4">Using the tractor specifications from Problem 1: <span class="math"><i class="variable">M</i> = 6,000 kg</span>, <span class="math"><i class="variable">L<sub class="sub">r</sub></i> = 1.5 m</span>, <span class="math"><i class="variable">h<sub class="sub">CG</sub></i> = 1.0 m</span>, and <span class="math"><i class="variable">W</i> = 58,860 N</span>. Assume no implement is attached.</p>
+                                        <h3 class="text-lg font-semibold text-stone-800">Question:</h3>
+                                        <p class="text-stone-700">Calculate the maximum possible forward acceleration ($a<sub class="sub">max</sub>$) the tractor can achieve before the front wheels lift off the ground (Condition for Rearward Overturning). Ignore power limits and wheel slip.</p>
+                                    </div>
+
+                                    <div class="fbd-diagram" style="height: 180px;">
+                                        <div class="fbd-box">Tractor (CG)</div>
+                                        <div class="fbd-arrow" style="left: 20%; bottom: 10px; color: #9ca3af;">↑ <i class="variable">N<sub class="sub">f</sub></i> = 0</div>
+                                        <div class="fbd-arrow" style="left: 75%; bottom: 10px;">↑ <i class="variable">N<sub class="sub">r</sub></i></div>
+                                        <div class="fbd-arrow" style="left: 50%; top: 10px; transform: translateX(-50%);">↓ <i class="variable">W</i></div>
+                                        <div class="fbd-arrow" style="left: 50%; top: 40%; transform: translateX(-50%); color: #ef4444; font-weight: 700;">← <i class="variable">F<sub class="sub">inertia</sub></i></div>
+                                    </div>
+
+                                    <div class="space-y-2 accordion-container">
+                                        <div class="accordion-item">
+                                            <button class="accordion-toggle">
+                                                <span>Step 1: Define the Tipping Condition</span>
+                                                <span class="icon"></span>
+                                            </button>
+                                            <div class="accordion-content">
+                                                <p class="text-stone-700">Rearward overturning begins when the front wheels lift off the ground. At this exact moment, the Normal Force on the front axle is zero (<span class="math"><i class="variable">N<sub class="sub">f</sub></i> = 0</span>).</p>
+                                                <p class="text-stone-700 mt-2">The tractor pivots around the tipping axis, which is the center of the rear axle ($R$).</p>
+                                            </div>
+                                        </div>
+                                        <div class="accordion-item">
+                                            <button class="accordion-toggle">
+                                                <span>Step 2: Dynamic Moment Equilibrium</span>
+                                                <span class="icon"></span>
+                                            </button>
+                                            <div class="accordion-content">
+                                                <p class="text-stone-700">At the point of tipping, the moments around the rear axle ($R$) are balanced. The "Restoring Moment" (from $W$) is equal to the "Overturning Moment" (from $F_{inertia}$).</p>
+                                                <p class="mt-2"><span class="math">Σ<i class="variable">M<sub class="sub">R</sub></i> = 0</span></p>
+                                                <p class="mt-2"><span class="math">(<i class="variable">W</i> × <i class="variable">L<sub class="sub">r</sub></i>) - (<i class="variable">F<sub class="sub">inertia</sub></i> × <i class="variable">h<sub class="sub">CG</sub></i>) = 0</span></p>
+                                                <p class="mt-2"><span class="math"><i class="variable">W</i> × <i class="variable">L<sub class="sub">r</sub></i> = <i class="variable">F<sub class="sub">inertia</sub></i> × <i class="variable">h<sub class="sub">CG</sub></i></span></p>
+                                            </div>
+                                        </div>
+                                        <div class="accordion-item">
+                                            <button class="accordion-toggle">
+                                                <span>Step 3: Substitute Inertial Force</span>
+                                                <span class="icon"></span>
+                                            </button>
+                                            <div class="accordion-content">
+                                                <p class="text-stone-700">We know that $F_{inertia} = M \cdot a$. We are looking for $a_{max}$.</p>
+                                                <p class="mt-2"><span class="math"><i class="variable">W</i> × <i class="variable">L<sub class="sub">r</sub></i> = (<i class="variable">M</i> × <i class="variable">a<sub class="sub">max</sub></i>) × <i class="variable">h<sub class="sub">CG</sub></i></span></p>
+                                            </div>
+                                        </div>
+                                        <div class="accordion-item">
+                                            <button class="accordion-toggle">
+                                                <span>Step 4: Solve for $a<sub class="sub">max</sub>$</span>
+                                                <span class="icon"></span>
+                                            </button>
+                                            <div class="accordion-content">
+                                                <p class="text-stone-700">Rearrange the equation to solve for $a_{max}$.</p>
+                                                <p class="mt-2"><span class="math"><i class="variable">a<sub class="sub">max</sub></i> = (<i class="variable">W</i> × <i class="variable">L<sub class="sub">r</sub></i>) / (<i class="variable">M</i> × <i class="variable">h<sub class="sub">CG</sub></i>)</span></p>
+                                                <p class="text-stone-700 mt-2">Since $W = M \cdot g$, the mass $M$ cancels out:</p>
+                                                <p class="mt-2"><span class="math"><i class="variable">a<sub class="sub">max</sub></i> = (<i class="variable">M</i>·<i class="variable">g</i> × <i class="variable">L<sub class="sub">r</sub></i>) / (<i class="variable">M</i> × <i class="variable">h<sub class="sub">CG</sub></i>) = <i class="variable">g</i> × (<i class="variable">L<sub class="sub">r</sub></i> / <i class="variable">h<sub class="sub">CG</sub></i>)</span></p>
+                                                <p class="text-stone-700 mt-2">Now, plug in the values:</p>
+                                                <p class="mt-2"><span class="math"><i class="variable">a<sub class="sub">max</sub></i> = 9.81 m/s<sup>2</sup> × (1.5 m / 1.0 m)</span></p>
+                                                <p class="mt-2"><span class="math"><i class="variable">a<sub class="sub">max</sub></i> = 14.715 m/s<sup>2</sup></span></p>
+                                            </div>
+                                        </div>
+                                        <div class="accordion-item">
+                                            <button class="accordion-toggle">
+                                                <span>Conclusion</span>
+                                                <span class="icon"></span>
+                                            </button>
+                                            <div class="accordion-content">
+                                                <p class="font-bold text-amber-800">Answer: The maximum theoretical acceleration is $14.715 \text{ m/s}^2$.</p>
+                                                <p class="text-stone-700 mt-2">The ratio $L_r / h_{CG}$ is known as the **Static Stability Factor**. This calculation shows that the tractor's stability against rearward overturning is purely dependent on its geometry ($L_r$ and $h_{CG}$) and gravity.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </section>
+                        </div>
+                    </div>
+                </div>
+
             </section>
         </div>
     </main>
@@ -294,7 +611,8 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             
-            const navButtons = document.querySelectorAll('.nav-btn');
+            // --- 1. Main Navigation Logic (Overview, Systems, Implements, etc.) ---
+            const navButtons = document.querySelectorAll('.nav-btn[data-content]');
             const contentSections = document.querySelectorAll('.content-section');
 
             navButtons.forEach(button => {
@@ -315,6 +633,7 @@
             });
 
             
+            // --- 2. Implement Tab Logic (Mounted, Semi-Mounted, Trailed) ---
             const implementTabsContainer = document.getElementById('implement-tabs');
             if (implementTabsContainer) {
                 const tabButtons = implementTabsContainer.querySelectorAll('.tab-btn');
@@ -339,24 +658,7 @@
             }
 
             
-            function formatLabel(str) {
-                if (str.length <= 16) return str;
-                const words = str.split(' ');
-                let lines = [];
-                let currentLine = '';
-                for (const word of words) {
-                    if ((currentLine + ' ' + word).trim().length > 16) {
-                        lines.push(currentLine.trim());
-                        currentLine = word;
-                    } else {
-                        currentLine = (currentLine + ' ' + word).trim();
-                    }
-                }
-                if (currentLine) lines.push(currentLine.trim());
-                return lines;
-            }
-
-            
+            // --- 3. Chart.js Initialization ---
             const timeCtx = document.getElementById('timeChart');
             if (timeCtx) {
                 new Chart(timeCtx.getContext('2d'), {
@@ -402,14 +704,58 @@
                 });
             }
 
+            // --- 4. Problem Set Navigation Logic (p1, p2, p3) ---
+            const problemNavContainer = document.getElementById('problem-nav');
+            const problemContentSections = document.querySelectorAll('.problem-content');
+
+            if (problemNavContainer) {
+                const navButtons = problemNavContainer.querySelectorAll('.nav-btn');
+
+                navButtons.forEach(button => {
+                    button.addEventListener('click', () => {
+                        const problemId = button.dataset.problem;
+                        
+                        navButtons.forEach(btn => btn.classList.remove('active'));
+                        button.classList.add('active');
+
+                        problemContentSections.forEach(section => {
+                            if (section.id === `${problemId}-content`) {
+                                section.classList.add('active');
+                            } else {
+                                section.classList.remove('active');
+                            }
+                        });
+                    });
+                });
+            }
+
+
+            // --- 5. Accordion Logic for Problem Steps (Step 1, Step 2, etc.) ---
+            const problemPanel = document.getElementById('problem-panel');
+
+            if (problemPanel) {
+                problemPanel.addEventListener('click', (e) => {
+                    const targetToggle = e.target.closest('.accordion-toggle');
+                    if (!targetToggle) return;
+
+                    const content = targetToggle.nextElementSibling;
+                    
+                    targetToggle.classList.toggle('active');
+                    
+                    // Toggle the 'active' class on the *content* to manage visibility via CSS
+                    content.classList.toggle('active');
+                });
+            }
+
         });
 
-      function sendHeight() {
-        const height = document.body.scrollHeight;
-         parent.postMessage({ height: height }, "*");
-       }
-       window.onload = sendHeight;
-       window.onresize = sendHeight;
+        // --- Utility functions for iframe (Optional: only needed if running inside an iframe) ---
+        function sendHeight() {
+          const height = document.body.scrollHeight;
+           parent.postMessage({ height: height }, "*");
+         }
+         window.onload = sendHeight;
+         window.onresize = sendHeight;
     </script>
 </body>
 </html>
