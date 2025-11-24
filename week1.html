@@ -328,6 +328,31 @@
                             <p class="text-stone-700 mt-2"><span class="font-semibold">Connection:</span> Connected by a simple drawbar. The implement is fully supported by its own wheels.</p>
                             <p class="text-stone-700 mt-2"><span class="font-semibold">Primary Dynamic Effect:</span> Introduces significant <strong>Lateral Force</strong> and <strong>Yaw Moment</strong> during turns. This directly affects steering stability and can cause <strong>Drifting</strong>.</p>
                             <p class="text-stone-700 mt-2"><span class="font-semibold">Examples:</span> Trailers, Large Disks, Harvesters.</p>
+                         <!-- 1. Trailed (Pull-Type) Implements -->
+       
+                <p class="text-stone-700 mt-2"><span class="font-semibold">Axle Load Analysis:</span> Connected via a simple drawbar ($F_V = 0$ at the drawbar). The implement's entire weight is supported by its own wheels. Load transfer is purely based on the drawbar height ($h_D$) and draft force ($F_H$).
+            <h3 class="condition-header">A. Static Condition ($$a=0$$, $$F_{H}=0$$)</h3>
+            <div class="text-center text-lg p-2 bg-red-100 rounded-md">
+                $$N_r = \frac{M g L_f}{L}$$
+            </div>
+            <p class="mt-2 text-sm text-gray-600">
+                The load is only the tractor's static weight distribution.
+            </p>
+
+            <h3 class="condition-header mt-6">B. Dynamic Condition ($$a \ne 0$$, $$F_{H} \ne 0$$)</h3>
+            <div class="text-center text-xl p-3 bg-red-200 rounded-md overflow-x-auto">
+                $$N_r' = \underbrace{\frac{M g L_f}{L}}_{\text{Static Load}} + \underbrace{\frac{M a h_{CG}}{L}}_{\text{Acceleration Transfer}} + \underbrace{\frac{F_{H} h_{D}}{L}}_{\text{Draft Transfer}}$$
+            </div>
+            <p class="mt-2 text-sm text-gray-600">
+                Load transfer occurs from acceleration and the draft force acting at the drawbar height ($h_D$).
+            </p>
+          <!-- Variable Key -->
+        <div class="mb-10 p-4 bg-gray-100 rounded-lg border border-gray-300">
+            <h2 class="text-xl font-bold text-gray-800 mb-3">Key Variables</h2>
+            <p class="text-sm text-gray-700">
+                $N_r'$: Dynamic Rear Axle Load | $M$: Tractor Mass | $L$: Wheelbase | $L_f$: CG to Front Axle | $a$: Acceleration | $h_{CG}$: CG Height | $F_{H}$: Horizontal Draft Force | $h_{D}$: Drawbar Height | $F_{V}$: Vertical Implement Force | $h_{P}$: Hitch Point Height
+            </p>
+                        </p>
                         </div>
                     </div>
                 </div>
