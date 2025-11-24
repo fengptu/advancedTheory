@@ -298,6 +298,22 @@
                             <p class="text-stone-700 mt-2"><span class="font-semibold">Connection:</span> Connected to the 3PH at the front; supported by its own transport wheels at the rear.</p>
                             <p class="text-stone-700 mt-2"><span class="font-semibold">Primary Dynamic Effect:</span> Load is shared between the hitch and the implement's wheels. This creates a complex <strong>Pitch Moment</strong> interaction and a very long effective wheelbase.</p>
                             <p class="text-stone-700 mt-2"><span class="font-semibold">Examples:</span> Large Ripper Plows, Large Seed Drills.</p>
+                             <p class="text-stone-700 mt-2"><span class="font-semibold">Axle Load Analysis:</span> Front end connected to 3PH, rear end supported by wheels. This reduces the vertical load ($F_V$) transmitted to the tractor compared to fully mounted, leading to more stable dynamics.
+                        <h3 class="condition-header">A. Static Condition ($$a=0$$, $$F_{H}=0$$)</h3>
+            <div class="text-center text-lg p-2 bg-indigo-100 rounded-md">
+                $$N_r = \frac{M g L_f}{L}$$
+            </div>
+            <p class="mt-2 text-sm text-gray-600">
+                The static load is primarily the tractor's weight. The implement's weight is carried mostly by its own wheels. (Small, static vertical load transfer via the hitch is often negligible).
+            </p>
+
+            <h3 class="condition-header mt-6">B. Dynamic Condition ($$a \ne 0$$, $$F_{H} \ne 0$$)</h3>
+            <div class="text-center text-xl p-3 bg-indigo-200 rounded-md overflow-x-auto">
+                $$N_r' = \underbrace{\frac{M g L_f}{L}}_{\text{Static Load}} + \underbrace{\frac{M a h_{CG}}{L}}_{\text{Acceleration Transfer}} + \underbrace{\frac{F_{H} h_{P} + F_{V}^* L_{fP}}{L}}_{\text{3PH Implement Transfer (Stabilized)}}$$
+            </div>
+            <p class="mt-2 text-sm text-gray-600">
+                The overall equation form is the same as Fully Mounted, but the vertical force term ($$F_{V}^*$$) is significantly reduced and more predictable because the rear wheels of the implement stabilize the vertical motion.
+            </p> </p>
                         </div>
                         
                         <div id="trailed" class="tab-content p-4">
